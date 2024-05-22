@@ -44,3 +44,13 @@ steps:
     workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
     environmentServiceNameAzureRM: '$(subscription)'
     commandOptions: '-out=tfplan'
+
+- task: TerraformTaskV4@4
+  displayName: terraform apply tfplan
+  condition: eq(variables.anyTfChanges, true)
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
+    commandOptions: 'tfplan; tfplan -auto-approve'
+    environmentServiceNameAzureRM: '$(subscription)'
