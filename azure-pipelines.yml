@@ -39,7 +39,7 @@ stages:
       displayName: terraform init
       inputs:
         provider: 'azurerm'
-        command: 'init -upgrade'
+        command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
         backendServiceArm: '$(subscription)'
         backendAzureRmResourceGroupName: '$(resourceGroup)'
@@ -61,3 +61,8 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
         environmentServiceNameAzureRM: '$(subscription)'
         commandOptions: '-out=tfplan'
+        backendServiceArm: '$(subscription)'
+        backendAzureRmResourceGroupName: '$(resourceGroup)'
+        backendAzureRmStorageAccountName: '$(storageAccount)'
+        backendAzureRmContainerName: '$(tfstate)'
+        backendAzureRmKey: '$(tfstateFile)'
