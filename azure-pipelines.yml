@@ -46,10 +46,7 @@ stages:
         backendAzureRmStorageAccountName: '$(storageAccount)'
         backendAzureRmContainerName: '$(tfstate)'
         backendAzureRmKey: '$(tfstateFile)'
-
-- stage: Plan
-  displayName: Terraform Plan
-  jobs:
+        
   - job: TerraformPlan
     displayName: Terraform Plan
     steps:
@@ -57,7 +54,6 @@ stages:
       displayName: Terraform plan
       inputs:
         provider: 'azurerm'
-        command: 'init'
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
         environmentServiceNameAzureRM: '$(subscription)'
