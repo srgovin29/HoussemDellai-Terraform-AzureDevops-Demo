@@ -61,19 +61,3 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
         environmentServiceNameAzureRM: '$(subscription)'
         commandOptions: '-out=tfplan'
-
-- stage: Deploy
-  displayName: Terraform Deploy
-  jobs:
-  - job: TerraformDeploy
-    displayName: Terraform Deploy
-    steps:
-    - task: TerraformTaskV4@4
-      displayName: terraform apply tfplan
-      condition: eq(variables.anyTfChanges, true)
-      inputs:
-        provider: 'azurerm'
-        command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
-        commandOptions: 'tfplan; tfplan -auto-approve'
-        environmentServiceNameAzureRM: '$(subscription)'
