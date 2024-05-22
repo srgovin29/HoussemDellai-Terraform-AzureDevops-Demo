@@ -46,7 +46,7 @@ stages:
         terraformVersion: 'latest'
   
 - stage: TerraformInit
-  displayName: Terraform Init
+  displayName: Install WebApp
   jobs:
   - job:
     steps:
@@ -59,12 +59,7 @@ stages:
         backendAzureRmStorageAccountName: $(terraformtfstatesrgovin)
         backendAzureRmContainerName: $(tfstate)
         backendAzureRmKey: $(tfstateFile)
-  
-- stage: TerraformPlan
-  displayName: Terraform Init
-  jobs:
-  - job:
-    steps:
+
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
