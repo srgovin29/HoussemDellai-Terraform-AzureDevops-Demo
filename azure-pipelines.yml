@@ -39,7 +39,7 @@ stages:
       displayName: terraform init
       inputs:
         provider: 'azurerm'
-        command: 'init'
+        command: 'init -upgrade'
         workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
         backendServiceArm: '$(subscription)'
         backendAzureRmResourceGroupName: '$(resourceGroup)'
