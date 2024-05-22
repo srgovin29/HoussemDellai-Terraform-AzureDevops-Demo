@@ -46,8 +46,9 @@ stages:
         backendAzureRmStorageAccountName: '$(storageAccount)'
         backendAzureRmContainerName: '$(tfstate)'
         backendAzureRmKey: '$(tfstateFile)'
-        
+
   - job: TerraformPlan
+    dependsOn: TerraformInit
     displayName: Terraform Plan
     steps:
     - task: TerraformTaskV4@4
