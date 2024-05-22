@@ -11,7 +11,7 @@ pool:
 
 variables:
   subscription: 'srgovin29_subscription(7e9464cb-6d69-4edc-8ee0-613d543b56d0)'
-  resourceGroup: terraform-resource-group"
+  resourceGroup: terraform-resource-group
   storageAccount: terraformtfstatesrgovin
   container: tfstate
   tfstateFile: terraform.tfstate
@@ -35,3 +35,12 @@ steps:
     backendAzureRmStorageAccountName: '$(storageAccount)'
     backendAzureRmContainerName: '$(tfstate)'
     backendAzureRmKey: '$(tfstateFile)'
+
+- task: TerraformTaskV4@4
+  displayName: Terraform plan
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
+    environmentServiceNameAzureRM: '$(subscription)'
+    commandOptions: '-out=tfplan'
