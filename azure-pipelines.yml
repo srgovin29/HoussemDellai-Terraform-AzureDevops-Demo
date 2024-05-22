@@ -17,40 +17,14 @@ variables:
   tfstateFile: terraform.tfstate
   anyTfChanges: false
 
-steps:
-
-- task: TerraformInstaller@0
-  displayName: install Terraform v0.12.28
-  inputs:
-    terraformVersion: 'latest'
-
-- task: TerraformTaskV4@4
-  displayName: terraform init
-  inputs:
-    provider: 'azurerm'
-    command: 'init'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
-    backendServiceArm: '$(subscription)'
-    backendAzureRmResourceGroupName: '$(resourceGroup)'
-    backendAzureRmStorageAccountName: '$(storageAccount)'
-    backendAzureRmContainerName: '$(tfstate)'
-    backendAzureRmKey: '$(tfstateFile)'
-
-- task: TerraformTaskV4@4
-  displayName: Terraform plan
-  inputs:
-    provider: 'azurerm'
-    command: 'plan'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
-    environmentServiceNameAzureRM: '$(subscription)'
-    commandOptions: '-out=tfplan'
-
-- task: TerraformTaskV4@4
-  displayName: terraform apply tfplan
-  #condition: eq(variables.anyTfChanges, true)
-  inputs:
-    provider: 'azurerm'
-    command: 'apply'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
-    commandOptions: 'tfplan; tfplan -auto-approve'
-    environmentServiceNameAzureRM: '$(subscription)'
+stages:
+- stage: Install
+  displayName: Terraform Installation
+  jobs:
+  - job: TerraformInstall
+    displayName: Terraform Installation
+    steps:
+    - task: TerraformInstaller@0
+      displayName: install Terraform v0.12.28
+      inputs:
+        terraformVersion: 'latest'
