@@ -23,3 +23,15 @@ steps:
   displayName: install Terraform v0.12.28
   inputs:
     terraformVersion: 'latest'
+
+- task: TerraformTaskV4@4
+  displayName: terraform init
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
+    backendServiceArm: '$(subscription)'
+    backendAzureRmResourceGroupName: '$(resourceGroup)'
+    backendAzureRmStorageAccountName: '$(storageAccount)'
+    backendAzureRmContainerName: '$(tfstate)'
+    backendAzureRmKey: '$(tfstateFile)'
