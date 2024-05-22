@@ -11,7 +11,7 @@ pool:
 
 variables:
   subscription: 'srgovin29_subscription(7e9464cb-6d69-4edc-8ee0-613d543b56d0)'
-  resourceGroup: resourcegroup-tfstate
+  resourceGroup: terraform-resource-group"
   storageAccount: terraformtfstatesrgovin
   container: tfstate
   tfstateFile: terraform.tfstate
