@@ -9,38 +9,54 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  subscription: 'srgovin29_subscription(7e9464cb-6d69-4edc-8ee0-613d543b56d0)'
+  resourceGroup: terraform-resource-group
+  storageAccount: terraformtfstatesrgovin
+  container: tfstate
+  tfstateFile: terraform.tfstate
+  anyTfChanges: false
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+- stage: HelloWorld
+  displayName: Hello, world!
+  steps:
+  - script: echo Hello, world!
+    displayName: 'Run a one-line script'
 
-- task: TerraformInstaller@1
-  inputs:
-    terraformVersion: 'latest'
+- stage: echoDetail
+  displayName: Run a multi-line script
+  - script: |
+      echo Add other tasks to build, test, and deploy your project.
+      echo See https://aka.ms/yaml
+    displayName: 'Run a multi-line script'
 
-- task: TerraformTaskV4@4
-  inputs:
-    provider: 'azurerm'
-    command: 'init'
-    backendServiceArm: 'srgovin29_subscription(7e9464cb-6d69-4edc-8ee0-613d543b56d0)'
-    backendAzureRmResourceGroupName: 'terraform-resource-group'
-    backendAzureRmStorageAccountName: 'terraformtfstatesrgovin'
-    backendAzureRmContainerName: 'tfstate'
-    backendAzureRmKey: 'terraform.tfstate'
-    
-- task: TerraformTaskV4@4
-  inputs:
-    provider: 'azurerm'
-    command: 'plan'
-    commandOptions: '-out=tfplan'
-    environmentServiceNameAzureRM: 'srgovin29_subscription(7e9464cb-6d69-4edc-8ee0-613d543b56d0)'
+- stage: TerraformExecution
+  displayName: Deploy using Terraform
+  - task: TerraformInstaller@1
+    inputs:
+      terraformVersion: 'latest'
 
-- task: TerraformTaskV4@4
-  inputs:
-    provider: 'azurerm'
-    command: 'apply'
-    environmentServiceNameAzureRM: 'srgovin29_subscription(7e9464cb-6d69-4edc-8ee0-613d543b56d0)'
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      backendServiceArm: $(subscription)
+      backendAzureRmResourceGroupName: $(resourceGroup)
+      backendAzureRmStorageAccountName: $(terraformtfstatesrgovin)
+      backendAzureRmContainerName: $(tfstate)
+      backendAzureRmKey: $(tfstateFile)
+      
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'plan'
+      commandOptions: '-out=tfplan'
+      environmentServiceNameAzureRM: $(subscription)
+
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      commandOptions: '-input=false tfplan'
+      environmentServiceNameAzureRM: $(subscription)
