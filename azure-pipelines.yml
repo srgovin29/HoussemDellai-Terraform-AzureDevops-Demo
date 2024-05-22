@@ -20,43 +20,51 @@ variables:
 stages:
 - stage: HelloWorld
   displayName: Hello, world!
-  steps:
-  - script: echo Hello, world!
-    displayName: 'Run a one-line script'
+  jobs:
+  - job: HelloWorld
+    steps:
+    - script: 
+        echo Hello, world!
+      displayName: 'Run a one-line script'
 
 - stage: echoDetail
-  displayName: Run a multi-line script
-  - script: |
-      echo Add other tasks to build, test, and deploy your project.
-      echo See https://aka.ms/yaml
-    displayName: 'Run a multi-line script'
+  jobs:
+  - job: RunMultiLineScript
+    steps:
+    - script: |
+        echo Add other tasks to build, test, and deploy your project.
+        echo See https://aka.ms/yaml
+      displayName: 'Run a multi-line script'
 
 - stage: TerraformExecution
   displayName: Deploy using Terraform
-  - task: TerraformInstaller@1
-    inputs:
-      terraformVersion: 'latest'
+  jobs:
+  - job: TerraformExecution
+    steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
 
-  - task: TerraformTaskV4@4
-    inputs:
-      provider: 'azurerm'
-      command: 'init'
-      backendServiceArm: $(subscription)
-      backendAzureRmResourceGroupName: $(resourceGroup)
-      backendAzureRmStorageAccountName: $(terraformtfstatesrgovin)
-      backendAzureRmContainerName: $(tfstate)
-      backendAzureRmKey: $(tfstateFile)
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: $(subscription)
+        backendAzureRmResourceGroupName: $(resourceGroup)
+        backendAzureRmStorageAccountName: $(terraformtfstatesrgovin)
+        backendAzureRmContainerName: $(tfstate)
+        backendAzureRmKey: $(tfstateFile)
       
-  - task: TerraformTaskV4@4
-    inputs:
-      provider: 'azurerm'
-      command: 'plan'
-      commandOptions: '-out=tfplan'
-      environmentServiceNameAzureRM: $(subscription)
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        commandOptions: '-out=tfplan'
+        environmentServiceNameAzureRM: $(subscription)
 
-  - task: TerraformTaskV4@4
-    inputs:
-      provider: 'azurerm'
-      command: 'apply'
-      commandOptions: '-input=false tfplan'
-      environmentServiceNameAzureRM: $(subscription)
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        commandOptions: '-input=false tfplan'
+        environmentServiceNameAzureRM: $(subscription)
