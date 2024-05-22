@@ -57,8 +57,9 @@ stages:
       displayName: Terraform plan
       inputs:
         provider: 'azurerm'
+        command: 'init'
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
         environmentServiceNameAzureRM: '$(subscription)'
-        #commandOptions: '-out=tfplan'
+        commandOptions: '-out=tfplan'
         backendServiceArm: '$(subscription)'
