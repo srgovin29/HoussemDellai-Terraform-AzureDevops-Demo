@@ -37,14 +37,19 @@ stages:
       displayName: 'Run a multi-line script'
 
 - stage: TerraformExecution
-  displayName: Deploy using Terraform
+  displayName: Install Terraform
   jobs:
   - job: TerraformExecution
     steps:
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
-
+  
+- stage: TerraformInit
+  displayName: Terraform Init
+  jobs:
+  - job:
+    steps:
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
@@ -54,7 +59,12 @@ stages:
         backendAzureRmStorageAccountName: $(terraformtfstatesrgovin)
         backendAzureRmContainerName: $(tfstate)
         backendAzureRmKey: $(tfstateFile)
-      
+  
+- stage: TerraformPlan
+  displayName: Terraform Init
+  jobs:
+  - job:
+    steps:
     - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
