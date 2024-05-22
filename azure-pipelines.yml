@@ -19,8 +19,13 @@ variables:
 
 steps:
 
-- task: TerraformTaskV4@4
-  displayName: Terraform Installer
+- task: TerraformInstaller@0
+  displayName: install Terraform v0.12.28
+  inputs:
+    terraformVersion: '0.12.28'
+
+- task: TerraformTaskV1@0
+  displayName: terraform init
   inputs:
     provider: 'azurerm'
     command: 'init'
@@ -47,5 +52,5 @@ steps:
     provider: 'azurerm'
     command: 'apply'
     workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
-    commandOptions: 'tfplan'
+    commandOptions: 'tfplan; tfplan -auto-approve'
     environmentServiceNameAzureRM: '$(subscription)'
