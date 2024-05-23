@@ -12,3 +12,8 @@ The video explaining the different steps is available here:
 
 the Skip-Step was originaaly from author and it was not working due to outdated commands
 So use main.tf file from the root directory
+
+Preerq:
+1. create the storage account as terraform-resource-group
+2. Create container as terraformtfstatesrgovin
+3. install checkov to scan terraform codes
